@@ -1,0 +1,41 @@
+### FOR BACKEND 
+
+# Qdrant Vector Database
+
+QDRANT_URL=
+QDRANT_API_KEY=
+
+# Google Gemini (for embeddings if useGemini = true)
+
+GOOGLE_API_KEY=YOUR_GEMINI_API_KEY(optional)
+
+# Cohere (fallback embedding model)
+
+COHERE_API_KEY=
+
+# Groq (for LLM chat completions)
+
+GROQ_API_KEY=
+
+CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+PORT=
+
+DATABASE_URL=
+
+-------------------------------------------------------------------------
+
+### FOR FRONTEND
+
+# Clerk Publishable Key (from your Clerk dashboard)
+
+VITE_CLERK_PUBLISHABLE_KEY=
+
+# Backend API URL (update for production)
+
+VITE_BACKEND_URL=
+
+# Python Text Extraction Service URL (update for production)
+
+VITE_PYTHON_SERVICE_URL=
