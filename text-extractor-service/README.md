@@ -78,7 +78,7 @@ This service can be deployed to platforms that support Python applications:
 
 ### Render Deployment
 
-The service includes a [render.yaml](file:///d:/Abdul%20Samad/Code%20Work/Projects/Rags-bot/text-extractor-service/render.yaml) configuration file for easy deployment to Render.
+The service is configured for deployment to Render using a [render.yaml](file:///d:/Abdul%20Samad/Code%20Work/Projects/Rags-bot/render.yaml) file located in the project root directory.
 
 For Render deployment, the service is configured to use the PORT environment variable provided by Render.
 
@@ -90,6 +90,6 @@ If you encounter issues with dependency installation:
 2. The build script includes optimizations to speed up dependency installation
 3. Check the build logs for any error messages during the pip install process
 4. Ensure the build command in render.yaml is correct: `chmod +x build.sh && ./build.sh`
-5. Verify the start command runs from the correct directory
+5. Verify the start command runs from the correct directory using the rootDir property
 
 The service now includes a health check endpoint at `/` or `/health` to verify it's running correctly.
