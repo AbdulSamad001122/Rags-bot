@@ -66,5 +66,15 @@ This service can be deployed to platforms that support Python applications:
 - AWS Elastic Beanstalk
 - Google Cloud Run
 - Azure App Service
+- Render
 
 For Railway deployment, the service is configured to use the PORT environment variable provided by Railway.
+
+### Render Deployment Notes
+
+The service includes a [build.sh](file:///d:/Abdul%20Samad/Code%20Work/Projects/Rags-bot/text-extractor-service/build.sh) script for Render deployment that installs system dependencies required by PyMuPDF. 
+
+If you encounter build timeouts:
+1. Make sure you're using a version of PyMuPDF that has precompiled wheels (like 1.24.10)
+2. The build script includes optimizations to speed up dependency installation
+3. Consider upgrading to Render's paid tiers for longer build times if needed

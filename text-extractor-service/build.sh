@@ -5,8 +5,11 @@
 apt-get update
 apt-get install -y build-essential libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev libgomp1
 
-# Install Python dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
+# Upgrade pip and install wheel for better dependency resolution
+pip install --upgrade pip setuptools wheel
+
+# Install Python dependencies with timeout and retry mechanism
+echo "Installing Python dependencies..."
+pip install --timeout 300 -r requirements.txt
 
 echo "Build completed successfully"
