@@ -65,5 +65,11 @@ def extract_text():
             os.remove(filepath)
         return jsonify({"error": str(e)}), 500
 
+# Health check endpoint
+@app.route("/", methods=["GET"])
+@app.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "healthy", "service": "text-extractor"}), 200
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5001)), debug=True)

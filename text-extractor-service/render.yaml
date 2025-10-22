@@ -4,7 +4,7 @@ services:
     runtime: python
     plan: free
     buildCommand: chmod +x build.sh && ./build.sh
-    startCommand: python extractor.py
+    startCommand: cd text-extractor-service && python extractor.py
     envVars:
       - key: PORT
         value: 8000

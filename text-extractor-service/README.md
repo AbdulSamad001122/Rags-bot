@@ -47,6 +47,14 @@ Extracts text from a PDF file.
 - Success: `{ "extracted_text": "..." }`
 - Error: `{ "error": "..." }`
 
+### GET /health
+
+Health check endpoint.
+
+**Response:**
+
+- Success: `{ "status": "healthy", "service": "text-extractor" }`
+
 ## Environment Variables
 
 - `PORT`: Port to run the service on (default: 5001)
@@ -68,13 +76,20 @@ This service can be deployed to platforms that support Python applications:
 - Azure App Service
 - Render
 
-For Railway deployment, the service is configured to use the PORT environment variable provided by Railway.
+### Render Deployment
 
-### Render Deployment Notes
+The service includes a [render.yaml](file:///d:/Abdul%20Samad/Code%20Work/Projects/Rags-bot/text-extractor-service/render.yaml) configuration file for easy deployment to Render.
 
-The service includes a [build.sh](file:///d:/Abdul%20Samad/Code%20Work/Projects/Rags-bot/text-extractor-service/build.sh) script for Render deployment that installs system dependencies required by PyMuPDF. 
+For Render deployment, the service is configured to use the PORT environment variable provided by Render.
 
-If you encounter build timeouts:
+#### Troubleshooting Render Deployments
+
+If you encounter issues with dependency installation:
+
 1. Make sure you're using a version of PyMuPDF that has precompiled wheels (like 1.24.10)
 2. The build script includes optimizations to speed up dependency installation
-3. Consider upgrading to Render's paid tiers for longer build times if needed
+3. Check the build logs for any error messages during the pip install process
+4. Ensure the build command in render.yaml is correct: `chmod +x build.sh && ./build.sh`
+5. Verify the start command runs from the correct directory
+
+The service now includes a health check endpoint at `/` or `/health` to verify it's running correctly.
