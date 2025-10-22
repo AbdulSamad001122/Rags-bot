@@ -6,12 +6,18 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-# Configure CORS to allow multiple origins
-allowed_origins = [
+# Configure CORS to allow multiple origins from environment variable
+# Default origins if ALLOWED_ORIGINS env variable is not set
+default_origins = [
     "http://localhost:5173",
-    "https://your-vercel-app.vercel.app",  # Vercel deployment (replace with your actual URL)
-    "https://your-custom-domain.com"       # Add any custom domains
 ]
+
+# Get allowed origins from environment variable, fallback to defaults
+allowed_origins_str = os.environ.get("ALLOWED_ORIGINS", "")
+if allowed_origins_str:
+    allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",")]
+else:
+    allowed_origins = default_origins
 
 CORS(app, origins=allowed_origins)
 
@@ -29,7 +35,7 @@ def extract_text():
 
     file = request.files["pdf"]
 
-    if file.filename == "":
+    if file.filename == "" or file.filename is None:
         return jsonify({"error": "Empty file name"}), 400
 
     # Secure filename and save
@@ -39,12 +45,13 @@ def extract_text():
     file.save(filepath)
 
     try:
-        # Open PDF and extract text
-        pdf_document = fitz.open(filepath)
+        # Open PDF and extract text using PyMuPDF
+        # Using fitz.open() is the correct way, suppressing linter warnings
+        pdf_document = fitz.open(filepath)  # type: ignore
         text = ""
-        for page_number in range(pdf_document.page_count):
+        for page_number in range(len(pdf_document)):
             page = pdf_document.load_page(page_number)
-            text += page.get_text("text")
+            text += page.get_text()
         pdf_document.close()
 
         # Optionally, delete file after processing
@@ -54,6 +61,9 @@ def extract_text():
         print("Extracted text length:", len(text))
         return jsonify({"extracted_text": text.strip()})
     except Exception as e:
+        # Clean up file if it exists
+        if os.path.exists(filepath):
+            os.remove(filepath)
         return jsonify({"error": str(e)}), 500
 
 

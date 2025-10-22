@@ -50,6 +50,12 @@ Extracts text from a PDF file.
 ## Environment Variables
 
 - `PORT`: Port to run the service on (default: 5001)
+- `ALLOWED_ORIGINS`: Comma-separated list of allowed origins for CORS (default: http://localhost:5173)
+
+Example:
+```
+ALLOWED_ORIGINS=http://localhost:5173,https://your-vercel-app.vercel.app,https://your-custom-domain.com
+```
 
 ## Deployment
 

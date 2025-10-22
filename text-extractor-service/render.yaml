@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: rags-text-extractor
+    runtime: python
+    plan: free
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: python extractor.py
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: ALLOWED_ORIGINS
+        sync: false
