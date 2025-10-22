@@ -21,7 +21,6 @@ else:
 
 CORS(app, origins=allowed_origins)
 
-
 # Temporary folder to save uploaded PDFs
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -49,7 +48,7 @@ def extract_text():
         # Using fitz.open() is the correct way, suppressing linter warnings
         pdf_document = fitz.open(filepath)  # type: ignore
         text = ""
-        for page_number in range(len(pdf_document)):
+        for page_number in range(pdf_document.page_count):
             page = pdf_document.load_page(page_number)
             text += page.get_text()
         pdf_document.close()
@@ -65,7 +64,6 @@ def extract_text():
         if os.path.exists(filepath):
             os.remove(filepath)
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5001)), debug=True)
