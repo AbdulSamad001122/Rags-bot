@@ -17,8 +17,7 @@ app.use(express.json());
 // ✅ Allow requests from your frontend (Vite)
 const allowedOrigins = [
   "http://localhost:5173", // Local development
-  "https://your-vercel-app.vercel.app", // Vercel deployment (replace with your actual URL)
-  "https://your-custom-domain.com", // Add any custom domains
+  "https://rags-bot-frontend.vercel.app", // Your actual Vercel deployment
 ];
 
 // Add any additional origins from environment variables
@@ -41,6 +40,7 @@ app.use(
     },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // optional, if you use cookies/auth
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   })
 );
 
