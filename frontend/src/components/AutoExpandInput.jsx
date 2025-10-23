@@ -48,8 +48,11 @@ export default function ChatPage({ botName }) {
     setCurrentBotMessageId(Date.now() + 1);
 
     try {
+
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
       // Use streaming endpoint for better user experience
-      const response = await fetch("http://localhost:3000/chat/stream", {
+      const response = await fetch(`${backendUrl}/chat/stream`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
