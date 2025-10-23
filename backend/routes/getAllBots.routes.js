@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const userId = getAuth(req).userId;
-    console.log(userId)
+    console.log("User ID:", userId);
 
     if (!userId) {
       return res.status(400).json({ message: "Unauthorized User" });
@@ -21,10 +21,11 @@ router.get("/", async (req, res) => {
       },
     });
 
+    console.log("Found bots:", allBots);
     return res.status(200).json(allBots);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-    console.log(error);
+    console.error("Error fetching bots:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
 

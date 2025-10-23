@@ -100,7 +100,7 @@ Maintain a friendly and professional tone.
 
     // 4️⃣ Call Groq model with streaming
     const stream = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.3-13b",
       temperature: 0.3,
       messages,
       stream: true, // This enables streaming
