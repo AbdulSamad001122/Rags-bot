@@ -17,7 +17,7 @@ app.use(express.json());
 // ✅ Allow requests from your frontend (Vite)
 const allowedOrigins = [
   "http://localhost:5173", // Local development
-  "https://rags-bot-frontend.vercel.app", // Your actual Vercel deployment
+  process.env.FRONTEND_URL, // Your actual Vercel deployment
 ];
 
 // Add any additional origins from environment variables
