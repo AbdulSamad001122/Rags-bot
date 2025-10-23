@@ -58,6 +58,11 @@ app.use("/chat", chatRoutes);
 
 app.use("/get-all-bots", getAllBotsRoutes);
 
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
+
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
