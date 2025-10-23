@@ -46,7 +46,9 @@ export default function ChatPage({ botName }) {
     setText("");
     setLoading(true);
     setStreamedResponse("");
-    setCurrentBotMessageId(Date.now() + 1);
+    // Use a more unique ID for the bot message
+    const botMessageId = `streaming-${Date.now()}`;
+    setCurrentBotMessageId(botMessageId);
 
     try {
       const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
@@ -93,7 +95,7 @@ export default function ChatPage({ botName }) {
               if (data.done) {
                 // Add final message to messages array
                 const botMessage = {
-                  id: currentBotMessageId,
+                  id: botMessageId,
                   text: accumulatedResponse || "No response",
                   sender: "bot",
                   time: formatTime(new Date()),
@@ -193,7 +195,7 @@ export default function ChatPage({ botName }) {
 
           {/* Streaming response display */}
           {streamedResponse && (
-            <div className="flex justify-start">
+            <div key={currentBotMessageId} className="flex justify-start">
               <div className="max-w-[70%] rounded-2xl px-4 py-3 bg-gray-700/50 text-gray-100">
                 <div className="text-sm leading-relaxed break-words prose prose-invert max-w-none prose-headings:text-white prose-p:text-gray-100 prose-strong:text-white prose-em:text-gray-200 prose-code:bg-gray-800 prose-code:text-red-400 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-800 prose-pre:p-4 prose-li:my-1 prose-a:text-blue-400 prose-a:hover:text-blue-300">
                   <ReactMarkdown>{streamedResponse}</ReactMarkdown>
@@ -207,7 +209,7 @@ export default function ChatPage({ botName }) {
           )}
 
           {loading && !streamedResponse && (
-            <div className="flex justify-start">
+            <div key={`loading-${Date.now()}`} className="flex justify-start">
               <div className="max-w-[70%] rounded-2xl px-4 py-3 bg-gray-700/50">
                 <div className="flex gap-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
