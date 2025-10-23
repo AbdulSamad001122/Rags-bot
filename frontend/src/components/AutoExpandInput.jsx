@@ -28,6 +28,7 @@ export default function ChatPage({ botName }) {
     return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
+      second: "2-digit",
     });
   };
 
@@ -48,7 +49,6 @@ export default function ChatPage({ botName }) {
     setCurrentBotMessageId(Date.now() + 1);
 
     try {
-
       const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
       // Use streaming endpoint for better user experience
@@ -81,7 +81,10 @@ export default function ChatPage({ botName }) {
         for (const line of lines) {
           if (line.startsWith("data: ")) {
             try {
-              const data = JSON.parse(line.slice(6));
+              // Handle potential malformed JSON by cleaning the data
+              const jsonData = line.slice(6);
+              const data = JSON.parse(jsonData);
+              
               if (data.content) {
                 // Add new content to accumulated response
                 accumulatedResponse += data.content;
@@ -104,11 +107,14 @@ export default function ChatPage({ botName }) {
               }
             } catch (e) {
               console.error("Error parsing stream data:", e);
+              console.error("Raw data:", line);
+              // Continue processing other lines instead of breaking
             }
           }
         }
       }
     } catch (error) {
+      console.error("Streaming error:", error);
       const errorMessage = {
         id: currentBotMessageId,
         text: "Sorry, something went wrong. Please try again.",
@@ -118,7 +124,6 @@ export default function ChatPage({ botName }) {
       setMessages((prev) => [...prev, errorMessage]);
       setStreamedResponse("");
       setCurrentBotMessageId(null);
-      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
