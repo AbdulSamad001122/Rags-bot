@@ -23,11 +23,16 @@ if (process.env.UPSTASH_REDIS_URL && process.env.UPSTASH_REDIS_TOKEN) {
 // In-memory chat histories (per bot/user namespace)
 const chatHistories = {};
 
+// Utility function to safely encode data for SSE
+function encodeSSEData(data) {
+  return JSON.stringify(data).replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+}
+
 // New function for streaming responses
 
 export async function streamChatbotResponse(question, userNamespace, res) {
   if (!question || question.trim() === "") {
-    res.write(`data: ${JSON.stringify({ error: "Please provide a question." })}\n\n`);
+    res.write(`data: ${encodeSSEData({ error: "Please provide a question." })}\n\n`);
     return;
   }
 
@@ -47,13 +52,13 @@ export async function streamChatbotResponse(question, userNamespace, res) {
         // Send content in chunks
         for (let i = 0; i < cachedResponse.length; i += chunkSize) {
           const chunk = cachedResponse.substring(i, Math.min(i + chunkSize, cachedResponse.length));
-          res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`);
+          res.write(`data: ${encodeSSEData({ content: chunk })}\n\n`);
           // Small delay to simulate streaming
           await new Promise(resolve => setTimeout(resolve, 10));
         }
         
         // Send completion signal
-        res.write(`data: ${JSON.stringify({ done: true, finalContent: cachedResponse })}\n\n`);
+        res.write(`data: ${encodeSSEData({ done: true, finalContent: cachedResponse })}\n\n`);
         res.end();
         return;
       }
@@ -114,8 +119,8 @@ Maintain a friendly and professional tone.
       const content = chunk.choices[0]?.delta?.content || "";
       if (content) {
         fullResponse += content;
-        // Send each token/content chunk to the client
-        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+        // Send each token/content chunk to the client with proper JSON encoding
+        res.write(`data: ${encodeSSEData({ content })}\n\n`);
       }
     }
 
@@ -135,14 +140,14 @@ Maintain a friendly and professional tone.
     }
 
     // 8️⃣ Send completion signal
-    res.write(`data: ${JSON.stringify({ done: true, finalContent: fullResponse })}\n\n`);
+    res.write(`data: ${encodeSSEData({ done: true, finalContent: fullResponse })}\n\n`);
     res.end();
 
     console.log(`💬 ${userNamespace} => ${question}`);
     console.log(`🤖 ${fullResponse}`);
   } catch (error) {
     console.error("Streaming error:", error);
-    res.write(`data: ${JSON.stringify({ error: "Error processing your request" })}\n\n`);
+    res.write(`data: ${encodeSSEData({ error: "Error processing your request" })}\n\n`);
     res.end();
   }
 }
