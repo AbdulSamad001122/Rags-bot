@@ -15,6 +15,9 @@ function App() {
   return (
     <>
       <div>
+        {/* Global Navbar */}
+        <Navbar />
+        
         {/* Define All Routes */}
         <Routes>
           <Route path="/" element={<LandingPage />} />

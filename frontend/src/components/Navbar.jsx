@@ -13,7 +13,7 @@ function Navbar() {
   const isLandingPage = location.pathname === "/";
 
   return (
-    <nav className="flex justify-between items-center p-4 bg-gray-900 text-white border-b border-gray-800">
+    <nav className="flex justify-between items-center p-4 bg-gray-900 text-white border-b border-gray-800 relative z-50">
       {/* Left side: App name / Home */}
       <div className="font-bold text-xl">
         <Link
